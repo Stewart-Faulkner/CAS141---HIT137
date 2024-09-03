@@ -1,48 +1,54 @@
-#CAS141 - HIT137 - Assignment 2 - Task 2 
-1.Open Anaconda Prompt
+import importlib
+import subprocess
 
-# Activate your environment (if not already activated):
-conda activate nlp_env 
+def check_installation(library):
+    try:
+        importlib.import_module(library)
+        return True
+    except ImportError:
+        return False
 
-# Enter the Python interactive environment:
-python
+def get_version(library):
+    try:
+        return importlib.import_module(library).__version__
+    except (ImportError, AttributeError):
+        return "Version not found"
 
-2.In the Python environment, enter the following code:
+def check_spacy_model(model_name):
+    try:
+        import spacy
+        spacy.load(model_name)
+        return True
+    except OSError:
+        return False
 
-import spacy
-import scispacy
-from transformers import AutoTokenizer, AutoModel
+libraries = ['spacy', 'scispacy', 'transformers', 'torch']
+spacy_models = ['en_core_sci_sm', 'en_ner_bc5cdr_md']
 
-# Load SpaCy models
-print("Loading en_core_sci_sm model...")
-nlp_sm = spacy.load("en_core_sci_sm")
-print("en_core_sci_sm model loaded successfully!")
+print("Checking library installations:")
+for lib in libraries:
+    if check_installation(lib):
+        version = get_version(lib)
+        print(f"✅ {lib} is installed (version: {version})")
+    else:
+        print(f"❌ {lib} is not installed")
 
-print("Loading en_ner_bc5cdr_md model...")
-nlp_bc5cdr = spacy.load("en_ner_bc5cdr_md")
-print("en_ner_bc5cdr_md model loaded successfully!")
+print("\nChecking spaCy model installations:")
+for model in spacy_models:
+    if check_spacy_model(model):
+        print(f"✅ {model} is installed")
+    else:
+        print(f"❌ {model} is not installed")
 
-# Load BioBERT model
-print("Loading BioBERT model...")
-tokenizer = AutoTokenizer.from_pretrained("monologg/biobert_v1.1_pubmed")
-model = AutoModel.from_pretrained("monologg/biobert_v1.1_pubmed")
-print("BioBERT model loaded successfully!")
+print("\nChecking for bio-medical models in Hugging Face Transformers:")
+try:
+    from transformers import AutoTokenizer, AutoModelForTokenClassification
+    model_name = "dmis-lab/biobert-v1.1-pubmed"
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    model = AutoModelForTokenClassification.from_pretrained(model_name)
+    print(f"✅ Successfully loaded {model_name}")
+except Exception as e:
+    print(f"❌ Failed to load {model_name}: {str(e)}")
 
-print("All libraries and models have been successfully loaded! Task 2 completed!")
-
-# Simple test
-test_text = "The patient was diagnosed with type 2 diabetes and prescribed metformin."
-
-doc = nlp_sm(test_text)
-print("\nEntity recognition results using en_core_sci_sm model:")
-for ent in doc.ents:
-    print(f"{ent.text}: {ent.label_}")
-
-doc = nlp_bc5cdr(test_text)
-print("\nEntity recognition results using en_ner_bc5cdr_md model:")
-for ent in doc.ents:
-    print(f"{ent.text}: {ent.label_}")
-
-print("\nBioBERT tokenization example:")
-tokens = tokenizer.tokenize(test_text)
-print(tokens[:10])  # Print the first 10 tokens
+print("\nNote: This script doesn't install libraries, it only checks their installation status.")
+print("If any libraries or models are missing, please install them using pip or conda.")
