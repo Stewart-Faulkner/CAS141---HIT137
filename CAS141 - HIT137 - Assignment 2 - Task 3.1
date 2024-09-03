@@ -1,39 +1,55 @@
-#CAS141 - HIT137 - Assignment 2 - Task 3.1
+import spacy
 from collections import Counter
 import csv
-import re
+
+# Load the English model
+nlp = spacy.load("en_core_web_sm")
 
 # File paths
 input_file = r'K:\New folder\Assignment 2\output.txt'
-output_csv_3_1 = r'K:\New folder\Assignment 2\top_30_words.csv'
+output_csv_3_1 = r'K:\New folder\Assignment 2\top_30_nouns.csv'
 
-# 3.1: Use Python built-in library to count word frequencies
-word_counter = Counter()
-chunk_size = 1000000
+# Initialize a Counter for noun frequency
+noun_counter = Counter()
 
-def simple_tokenize(text):
-    # Modify regular expression to exclude pure numbers
-    return [word for word in re.findall(r'\b[a-zA-Z]+\b', text.lower()) if not word.isdigit()]
+# Set chunk size for processing large files
+chunk_size = 100000  # Reduced chunk size to accommodate spaCy processing
 
+def extract_nouns(doc):
+    """
+    Extract nouns from the given spaCy document.
+    Ignore stop words, digits, and single-character words.
+    Return lemmatized forms of the nouns.
+    """
+    return [token.lemma_ for token in doc if token.pos_ == "NOUN" 
+            and not token.is_stop and not token.is_digit and len(token) > 1]
+
+# Process the input file in chunks
 with open(input_file, 'r', encoding='utf-8') as f:
-    while True:
-        chunk = f.read(chunk_size)
-        if not chunk:
-            break
-        words = simple_tokenize(chunk)
-        word_counter.update(words)
+    text = f.read(chunk_size)
+    while text:
+        # Process the chunk with spaCy
+        doc = nlp(text)
+        # Extract nouns and update the counter
+        nouns = extract_nouns(doc)
+        noun_counter.update(nouns)
+        # Print progress
+        print(f"Processed {f.tell()} bytes")
+        # Read the next chunk
+        text = f.read(chunk_size)
 
-top_30_words = word_counter.most_common(30)
+# Get the top 30 most common nouns
+top_30_nouns = noun_counter.most_common(30)
 
 # Write results to CSV file
 with open(output_csv_3_1, 'w', newline='', encoding='utf-8') as f:
     writer = csv.writer(f)
-    writer.writerow(['Word', 'Count'])
-    writer.writerows(top_30_words)
+    writer.writerow(['Noun', 'Count'])
+    writer.writerows(top_30_nouns)
 
-print(f"Task 3.1: Top 30 most common words (excluding numbers) have been written to {output_csv_3_1}")
+print(f"Task 3.1: Top 30 most common nouns have been written to {output_csv_3_1}")
 
 # Print results
-print("\nTask 3.1: Top 30 most common words (excluding numbers) obtained using Python built-in library:")
-for word, count in top_30_words:
-    print(f"{word}: {count}")
+print("\nTask 3.1: Top 30 most common nouns:")
+for noun, count in top_30_nouns:
+    print(f"{noun}: {count}")
