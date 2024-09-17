@@ -1,3 +1,5 @@
+# Task 1: Extract the ‘text’ in all the CSV files and store them into a single ‘.txt file’.
+
 import os
 import pandas as pd
 
