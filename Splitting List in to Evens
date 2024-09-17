@@ -1,0 +1,36 @@
+#Question 2 Chapter 2: The Chamber of Strings
+#Seperating the String
+#Ask for user input
+x = (input("Please enter a string (18 characters): "))
+
+#Print user input
+print(x)
+
+#Define alpha/numeric
+numeric = ''
+alpha = ''
+
+#Define difference and seperate
+for y in range(len(x)):
+	if x[y].isnumeric():
+		numeric += x[y]
+	elif x[y].isalpha():
+		alpha += x[y]
+	elif x[x] == '.':
+		bit_value = x[y+1]
+		break
+
+#Print resultant numbers
+print ("Numbers extract:", {numeric}) 
+print ('------------------------------')
+print ("Letters extract:", {alpha}) 
+
+#Seperating Even and Odd Numbers
+numeric_list = list(numeric)
+
+print (numeric_list)
+
+for g in numeric_list:
+     if g % 2 == 0:
+         print(g, end=" ")
+
