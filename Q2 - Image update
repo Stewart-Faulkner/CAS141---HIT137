@@ -1,0 +1,38 @@
+from PIL import Image("C:\Users\Stewart\OneDrive\Documents\Uni\HIT 137 - Software Now\Assignment 2\Assignment 2\chapter1.jpg")
+import time
+
+#generate the number from time
+current_time = int(time.time())
+generated_number = (current_time % 100) + 50
+if generated_number % 2 == 0:
+    generated_number += 10
+print (generated_number)
+
+#open the image, analyse pixels, create new one
+input_image_path = 'Chapter1.png'
+output_image_path = 'chapter1out.png'
+image = Image.open(input_image_path)
+pixels = image.load()
+width, height = image.size
+new_image = Image.new('RGB', (width, height))
+update_pixels = new_image.load()
+
+#start adding gen number from time to pixels, then save 
+for x in range(width):
+    for y in range(height):
+        r, g, b = pixels[x, y]
+        update_r = min(r + generated_number, 255)
+        update_g = min(g + generated_number, 255)
+        update_b = min(b + generated_number, 255)
+        update_pixels[x, y] = (update_r, update_g, update_b)
+new_image.save(output_image_path)
+
+#isolate red pixels and get the sum
+red_sum = 0
+for x in range(width):
+    for y in range(height):
+        r, _, _ = new_pixels[x, y]
+        red_sum += r
+
+# Print the result
+print("Sum of red pixel values:", red_sum)
