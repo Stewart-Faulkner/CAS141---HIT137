@@ -5,22 +5,18 @@ https://1drv.ms/t/s!AuwChfFuFBDXh_QJZNhuYNCXtv0tyg?e=zT1yRS
 Question 1 Readme:
 
 task 1
-
-Output to **Q1_output.txt**
+Output to CAS14_Q1_output.txt
 
 task 3.1
-
-Output to **Top_30_Words.csv**
+Output to CAS14_Q1_task_3_1_Results.csv
 
 task 3.2
-
-Output to **Q1_task3_2**
+Output to CAS14_Q1_task3_2_Results.csv
 
 task 4
+SCI and bc5cdr output to CAS14_Q1_task4_Comparison_Results_Scispacy.docx
+BioBERT output to CAS14_Q1_task4_Comparison_Results_BIO.docx
 
-SCI and bc5cdr output to **Comparison_Results_Scispacy.docx**
-
-BioBERT output to **Comparison_Results_BIO.docx**
 
 ----------------------------------------------------------------------------------
 Question 2 Readme:
